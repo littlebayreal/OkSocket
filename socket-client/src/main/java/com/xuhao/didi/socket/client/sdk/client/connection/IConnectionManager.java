@@ -81,6 +81,5 @@ public interface IConnectionManager extends
      * @return 重连管理器
      */
     AbsReconnectionManager getReconnectionManager();
-
 }
 

@@ -24,6 +24,11 @@ public class ActionHandler extends SocketActionAdapter {
 
     }
 
+	/**
+	 * 注册socket监听
+	 * @param manager
+	 * @param register
+	 */
     public void attach(IConnectionManager manager, IRegister<ISocketActionListener, IConnectionManager> register) {
         this.mManager = manager;
         register.registerReceiver(this);

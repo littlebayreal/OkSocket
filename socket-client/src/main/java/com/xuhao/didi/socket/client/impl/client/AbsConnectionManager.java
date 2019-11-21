@@ -76,6 +76,10 @@ public abstract class AbsConnectionManager implements IConnectionManager {
         return null;
     }
 
+	/**
+	 * 根据新的连接信息切换连接
+	 * @param info 新的连接信息
+	 */
     @Override
     public synchronized void switchConnectionInfo(ConnectionInfo info) {
         if (info != null) {
@@ -84,6 +88,7 @@ public abstract class AbsConnectionManager implements IConnectionManager {
             if (mActionDispatcher != null) {
                 mActionDispatcher.setConnectionInfo(mRemoteConnectionInfo);
             }
+            //重连时将信息保存在managerholder中
             if (mConnectionSwitchListener != null) {
                 mConnectionSwitchListener.onSwitchConnectionInfo(this, tempOldInfo, mRemoteConnectionInfo);
             }
@@ -93,5 +98,4 @@ public abstract class AbsConnectionManager implements IConnectionManager {
     protected void setOnConnectionSwitchListener(IConnectionSwitchListener listener) {
         mConnectionSwitchListener = listener;
     }
-
 }

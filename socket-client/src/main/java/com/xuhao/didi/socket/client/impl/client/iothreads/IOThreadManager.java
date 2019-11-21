@@ -55,6 +55,7 @@ public class IOThreadManager implements IIOManager<OkSocketOptions> {
     }
 
     private void initIO() {
+    	//检测协议头是否正常
         assertHeaderProtocolNotEmpty();
         mReader = new ReaderImpl();
         mReader.initialize(mInputStream, mSender);
@@ -82,7 +83,10 @@ public class IOThreadManager implements IIOManager<OkSocketOptions> {
         }
     }
 
-    private void duplex() {
+	/**
+	 * 双工模式
+	 */
+	private void duplex() {
         shutdownAllThread(null);
         mDuplexWriteThread = new DuplexWriteThread(mWriter, mSender);
         mDuplexReadThread = new DuplexReadThread(mReader, mSender);
@@ -90,7 +94,10 @@ public class IOThreadManager implements IIOManager<OkSocketOptions> {
         mDuplexReadThread.start();
     }
 
-    private void simplex() {
+	/**
+	 * 单工模式
+	 */
+	private void simplex() {
         shutdownAllThread(null);
         mSimplexThread = new SimplexIOThread(mReader, mWriter, mSender);
         mSimplexThread.start();

@@ -65,6 +65,12 @@ public class ManagerHolder {
         }
     }
 
+	/**
+	 * 构造IConnectionManager 获取连接
+	 * @param info
+	 * @param okOptions
+	 * @return
+	 */
     public IConnectionManager getConnection(ConnectionInfo info, OkSocketOptions okOptions) {
         IConnectionManager manager = mConnectionManagerMap.get(info);
         if (manager != null) {
@@ -82,6 +88,12 @@ public class ManagerHolder {
         }
     }
 
+	/**
+	 * 创建新的IConnectionManager
+	 * @param info
+	 * @param okOptions
+	 * @return
+	 */
     private IConnectionManager createNewManagerAndCache(ConnectionInfo info, OkSocketOptions okOptions) {
         AbsConnectionManager manager = new ConnectionManagerImpl(info);
         manager.option(okOptions);

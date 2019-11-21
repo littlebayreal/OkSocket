@@ -33,7 +33,6 @@ public abstract class AbsReconnectionManager implements ISocketActionListener {
     protected volatile Set<Class<? extends Exception>> mIgnoreDisconnectExceptionList = new LinkedHashSet<>();
 
     public AbsReconnectionManager() {
-
     }
 
     /**

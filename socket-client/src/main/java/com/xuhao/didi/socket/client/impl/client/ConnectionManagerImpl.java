@@ -92,6 +92,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         if (!isConnectionPermitted) {
             return;
         }
+        //保证只能有一个socket对象在连接
         isConnectionPermitted = false;
         if (isConnect()) {
             return;
@@ -101,18 +102,22 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             isConnectionPermitted = true;
             throw new UnConnectException("连接参数为空,检查连接参数");
         }
+        //将上一次的socket回调监听注销
         if (mActionHandler != null) {
             mActionHandler.detach(this);
             SLog.i("mActionHandler is detached.");
         }
+        //重新注册socket的回调监听
         mActionHandler = new ActionHandler();
+        //让ActionDispatcher绑定回调监听类  能够使socket的消息分发出来
         mActionHandler.attach(this, this);
         SLog.i("mActionHandler is attached.");
-
+        //重连管理器重新生成
         if (mReconnectionManager != null) {
             mReconnectionManager.detach();
             SLog.i("ReconnectionManager is detached.");
         }
+        //设置重连管理
         mReconnectionManager = mOptions.getReconnectionManager();
         if (mReconnectionManager != null) {
             mReconnectionManager.attach(this);
@@ -121,12 +126,13 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
 
         String info = mRemoteConnectionInfo.getIp() + ":" + mRemoteConnectionInfo.getPort();
         mConnectThread = new ConnectionThread(" Connect thread for " + info);
+        //设置连接线程为守护线程
         mConnectThread.setDaemon(true);
         mConnectThread.start();
     }
 
     private synchronized Socket getSocketByConfig() throws Exception {
-        //自定义socket操作
+        //自定义socket操作  暂时没用到
         if (mOptions.getOkSocketFactory() != null) {
             return mOptions.getOkSocketFactory().createSocket(mRemoteConnectionInfo, mOptions);
         }
@@ -217,6 +223,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
     }
 
     private void resolveManager() throws IOException {
+    	//初始化心跳管理器
         mPulseManager = new PulseManager(this, mOptions);
 
         mManager = new IOThreadManager(

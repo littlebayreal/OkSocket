@@ -181,6 +181,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
         if (option == null) {
             return;
         }
+        //如果设置了自定义线程 应该先发送给自定义进行自定义的业务逻辑处理
         OkSocketOptions.ThreadModeToken token = option.getCallbackThreadModeToken();
         if (token != null) {
             ActionBean bean = new ActionBean(action, serializable, this);
@@ -193,7 +194,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
         } else if (option.isCallbackInIndependentThread()) {//独立线程进行回调
             ActionBean bean = new ActionBean(action, serializable, this);
             ACTION_QUEUE.offer(bean);
-        } else if (!option.isCallbackInIndependentThread()) {//IO线程里进行回调
+        } else if (!option.isCallbackInIndependentThread()) {//IO线程里进行回调  默认线程回调 也就是不启用DispatchThread分发
             synchronized (mResponseHandlerList) {
                 List<ISocketActionListener> copyData = new ArrayList<>(mResponseHandlerList);
                 Iterator<ISocketActionListener> it = copyData.iterator();
@@ -217,14 +218,19 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     }
 
     /**
-     * 分发线程
+     * 分发线程  分发socket各种监听回调
      */
     private static class DispatchThread extends AbsLoopThread {
         public DispatchThread() {
             super("client_action_dispatch_thread");
         }
 
-        @Override
+		@Override
+		protected void beforeLoop() throws Exception {
+			super.beforeLoop();
+		}
+
+		@Override
         protected void runInLoopThread() throws Exception {
             ActionBean actionBean = ACTION_QUEUE.take();
             if (actionBean != null && actionBean.mDispatcher != null) {

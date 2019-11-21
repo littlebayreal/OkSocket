@@ -194,8 +194,8 @@ public class ComplexDemoActivity extends AppCompatActivity {
         LinearLayoutManager manager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mReceList.setLayoutManager(manager2);
         mReceList.setAdapter(mReceLogAdapter);
-
-        mInfo = new ConnectionInfo("104.238.184.237", 8080);
+        //设置连接信息
+        mInfo = new ConnectionInfo("10.111.12.49", 8080);
 
         final Handler handler = new Handler(Looper.getMainLooper());
         OkSocketOptions.Builder builder = new OkSocketOptions.Builder();
@@ -206,10 +206,12 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 handler.post(runnable);
             }
         });
+        //打开通道
         mManager = OkSocket.open(mInfo).option(builder.build());
     }
 
     private void setListener() {
+    	//注册对socket的监听服务
         mManager.registerReceiver(adapter);
 
         mReconnectSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -228,8 +230,10 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 }
             }
         });
-
-        mConnect.setOnClickListener(new View.OnClickListener() {
+		/**
+		 * 点击连接
+		 */
+		mConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mManager == null) {
