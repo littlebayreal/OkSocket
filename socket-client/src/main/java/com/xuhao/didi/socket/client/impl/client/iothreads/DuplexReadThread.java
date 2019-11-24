@@ -30,6 +30,7 @@ public class DuplexReadThread extends AbsLoopThread {
         mStateSender.sendBroadcast(IAction.ACTION_READ_THREAD_START);
     }
 
+    //在工作线程中不停的读取buffer
     @Override
     protected void runInLoopThread() throws IOException {
         mReader.read();

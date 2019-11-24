@@ -62,17 +62,19 @@ public class PulseManager implements IPulse {
         return mSendable;
     }
 
+    //心跳的初始化
     @Override
     public synchronized void pulse() {
         privateDead();
         updateFrequency();
+        //心跳只有在双工的情况下才会有
         if (mCurrentThreadMode != OkSocketOptions.IOThreadMode.SIMPLEX) {
             if (mPulseThread.isShutdown()) {
                 mPulseThread.start();
             }
         }
     }
-
+    //触发首次心跳
     @Override
     public synchronized void trigger() {
         if (isDead) {
@@ -82,13 +84,13 @@ public class PulseManager implements IPulse {
             mManager.send(mSendable);
         }
     }
-
+    //杀死心跳
     public synchronized void dead() {
         mLoseTimes.set(0);
         isDead = true;
         privateDead();
     }
-
+   //设置心跳的频率
     private synchronized void updateFrequency() {
         if (mCurrentThreadMode != OkSocketOptions.IOThreadMode.SIMPLEX) {
             mCurrentFrequency = mOkOptions.getPulseFrequency();
@@ -119,6 +121,9 @@ public class PulseManager implements IPulse {
         updateFrequency();
     }
 
+    /**
+     * 心跳线程
+     */
     private class PulseThread extends AbsLoopThread {
 
         @Override
@@ -129,6 +134,7 @@ public class PulseManager implements IPulse {
             }
             if (mManager != null && mSendable != null) {
                 if (mOkOptions.getPulseFeedLoseTimes() != -1 && mLoseTimes.incrementAndGet() >= mOkOptions.getPulseFeedLoseTimes()) {
+                    //心跳过长没收到  断开socket连接
                     mManager.disconnect(new DogDeadException("you need feed dog on time,otherwise he will die"));
                 } else {
                     mManager.send(mSendable);

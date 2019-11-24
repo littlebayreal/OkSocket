@@ -38,7 +38,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
      */
     private volatile OkSocketOptions mOptions;
     /**
-     * IO通讯管理器
+     * IO通讯管理器  它才是实际上的收发数据的管理器
      */
     private IIOManager mManager;
     /**
@@ -222,10 +222,15 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
         }
     }
 
+    /**
+     * 将socket的输入输出流通过配置，分发器和输入输出流管理器绑定
+     * @throws IOException
+     */
     private void resolveManager() throws IOException {
     	//初始化心跳管理器
         mPulseManager = new PulseManager(this, mOptions);
 
+        //初始化socket的读写进程
         mManager = new IOThreadManager(
                 mSocket.getInputStream(),
                 mSocket.getOutputStream(),

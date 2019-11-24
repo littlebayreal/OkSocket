@@ -61,9 +61,11 @@ public class ComplexDemoActivity extends AppCompatActivity {
         @Override
         public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
             logRece("连接成功(Connecting Successful)");
+            //发送握手包
             mManager.send(new HandShakeBean());
             mConnect.setText("DisConnect");
             initSwitch();
+            //发送心跳
             mManager.getPulseManager().setPulseSendable(new PulseBean());
             mIPET.setEnabled(true);
             mPortET.setEnabled(true);
@@ -128,6 +130,12 @@ public class ComplexDemoActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * 发送的回调
+         * @param info
+         * @param action
+         * @param data   写出的数据{@link ISendable}
+         */
         @Override
         public void onSocketWriteResponse(ConnectionInfo info, String action, ISendable data) {
             byte[] bytes = data.parse();
@@ -293,7 +301,7 @@ public class ComplexDemoActivity extends AppCompatActivity {
                 }
             }
         });
-
+        //触发心跳
         mMenualPulse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

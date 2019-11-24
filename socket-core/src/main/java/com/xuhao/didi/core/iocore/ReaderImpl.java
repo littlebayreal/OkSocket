@@ -38,12 +38,15 @@ public class ReaderImpl extends AbsReader {
                     mRemainingBuf.position(headerLength);
                 }
             } else {
+                //读取报文头
                 readHeaderFromChannel(headBuf, headBuf.capacity());
             }
+            //设置回传数据的头
             originalData.setHeadBytes(headBuf.array());
             if (SLog.isDebug()) {
                 SLog.i("read head: " + BytesUtils.toHexStringForLog(headBuf.array()));
             }
+            //从头部定义拿到报文的长度
             int bodyLength = headerProtocol.getBodyLength(originalData.getHeadBytes(), mOkOptions.getReadByteOrder());
             if (SLog.isDebug()) {
                 SLog.i("need read body length: " + bodyLength);
@@ -71,6 +74,7 @@ public class ReaderImpl extends AbsReader {
                         } else {//there are no data left
                             mRemainingBuf = null;
                         }
+                        //拿到body内容  并且将解析好的报文对象回传
                         //cause this time data from remaining buffer not from channel.
                         originalData.setBodyBytes(byteBuffer.array());
                         mStateSender.sendBroadcast(IOAction.ACTION_READ_COMPLETE, originalData);

@@ -28,7 +28,7 @@ public abstract class AbsConnectionManager implements IConnectionManager {
      */
     private IConnectionSwitchListener mConnectionSwitchListener;
     /**
-     * 状态机
+     * 状态机  监听分发器
      */
     protected ActionDispatcher mActionDispatcher;
 
