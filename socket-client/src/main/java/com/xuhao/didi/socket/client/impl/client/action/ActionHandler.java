@@ -13,7 +13,7 @@ import com.xuhao.didi.socket.common.interfaces.common_interfacies.dispatcher.IRe
  * Created by xuhao on 2017/5/18.
  */
 
-public class ActionHandler extends SocketActionAdapter {
+    public class ActionHandler extends SocketActionAdapter {
     private IConnectionManager mManager;
 
     private OkSocketOptions.IOThreadMode mCurrentThreadMode;
@@ -31,6 +31,7 @@ public class ActionHandler extends SocketActionAdapter {
 	 */
     public void attach(IConnectionManager manager, IRegister<ISocketActionListener, IConnectionManager> register) {
         this.mManager = manager;
+        //实际调用的是AbsConnectionManager中的registerReceiver方法 actionDispatcher获得actionhandler
         register.registerReceiver(this);
     }
 

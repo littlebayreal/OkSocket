@@ -11,6 +11,7 @@ import com.xuhao.didi.socket.common.interfaces.common_interfacies.dispatcher.IRe
 
 /**
  * Created by xuhao on 2017/5/16.
+ * socket连接的管理对象
  */
 
 public interface IConnectionManager extends

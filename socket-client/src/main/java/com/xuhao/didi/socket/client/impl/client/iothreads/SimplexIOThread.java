@@ -37,7 +37,7 @@ public class SimplexIOThread extends AbsLoopThread {
         mStateSender.sendBroadcast(IAction.ACTION_WRITE_THREAD_START);
         mStateSender.sendBroadcast(IAction.ACTION_READ_THREAD_START);
     }
-
+    //单线程收发的原理是  写一次 收一次
     @Override
     protected void runInLoopThread() throws IOException {
         isWrite = mWriter.write();

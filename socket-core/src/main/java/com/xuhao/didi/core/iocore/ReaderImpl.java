@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Created by xuhao on 2017/5/31.
+ * 解析类的具体实现
  */
 
 public class ReaderImpl extends AbsReader {

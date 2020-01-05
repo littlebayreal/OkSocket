@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * Created by xuhao on 2017/5/16.
+ * 对socket连接管理对象的管理
  */
 public class ManagerHolder {
 

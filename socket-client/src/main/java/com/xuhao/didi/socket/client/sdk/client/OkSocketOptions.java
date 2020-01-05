@@ -424,6 +424,6 @@ public class OkSocketOptions implements IIOCoreOptions {
         /**
          * 双工通讯
          */
-        DUPLEX;
+        DUPLEX
     }
 }

@@ -92,7 +92,7 @@ public class ActionDispatcher implements IRegister<ISocketActionListener, IConne
     }
 
     /**
-     * 分发收到的响应
+     * 分发收到的响应 针对用户定义的回调监听
      *
      * @param action
      * @param arg

@@ -107,7 +107,7 @@ public class ConnectionManagerImpl extends AbsConnectionManager {
             mActionHandler.detach(this);
             SLog.i("mActionHandler is detached.");
         }
-        //重新注册socket的回调监听
+        //重新注册socket的回调监听  这里面是对socket的一些情况的特殊处理  与用户的监听事件是分开的
         mActionHandler = new ActionHandler();
         //让ActionDispatcher绑定回调监听类  能够使socket的消息分发出来
         mActionHandler.attach(this, this);
